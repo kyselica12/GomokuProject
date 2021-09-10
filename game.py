@@ -54,7 +54,7 @@ class Game:
     def __init__(self, size=15):
         self.win_len = 5
         self.size = size
-        self.ALL_MOVES = set((i,j) for i in range(15) for j in range(15))
+        self.ALL_MOVES = set((i,j) for i in range(self.size) for j in range(self.size))
 
     def get_new_state(self):
         return GameState()
