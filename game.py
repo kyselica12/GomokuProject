@@ -51,13 +51,13 @@ class GameState:
 
 class Game:
 
-    def __init__(self, size=15):
-        self.win_len = 5
+    def __init__(self, size=15, win_size=5):
+        self.win_len = win_size
         self.size = size
         self.ALL_MOVES = set((i,j) for i in range(self.size) for j in range(self.size))
 
     def get_new_state(self):
-        return GameState()
+        return GameState(size=self.size)
     
     def available_moves(self, state:GameState):
         if state.terminal:
@@ -80,25 +80,25 @@ class Game:
         board[move] = state.on_turn
 
         x, y = move
-        for i in range(-4, 1):
+        for i in range(-(self.win_len-1), 1):
             # win sequence in row
-            if x+i >= 0 and x+4 < self.size:
-                if np.sum(board[x+i:x+i+5,y]) == self.win_len * state.on_turn:
+            if x+i >= 0 and x+(self.win_len-1) < self.size:
+                if np.sum(board[x+i:x+i+self.win_len,y]) == self.win_len * state.on_turn:
                     return True
             # win sequence in column
-            if y+i >= 0 and y+4 < self.size:
-                if np.sum(board[x,y+i:y+i+5]) == self.win_len * state.on_turn:
+            if y+i >= 0 and y+(self.win_len-1) < self.size:
+                if np.sum(board[x,y+i:y+i+self.win_len]) == self.win_len * state.on_turn:
                     return True
 
             # win sequence in diagonal from bottom to top
-            if x+i >= 0 and x+4 < self.size and y+i >= 0 and y+4 < self.size:
-                points = np.array([[x+i+j,y+i+j] for j in range(5)])
+            if x+i >= 0 and x+(self.win_len-1) < self.size and y+i >= 0 and y+(self.win_len-1) < self.size:
+                points = np.array([[x+i+j,y+i+j] for j in range(self.win_len)])
                 if np.sum(board[points[:,0],points[:,1]]) == self.win_len * state.on_turn:
                     return True
             
             # win sequence in diagonal from top to bottom
-            if x+i >= 0 and x+4 < self.size and y+i >= 0 and y+4 < self.size:
-                points = np.array([[x+i+j,y+i-j] for j in range(5)])
+            if x+i >= 0 and x+self.win_len-1 < self.size and y+i >= 0 and y+(self.win_len-1) < self.size:
+                points = np.array([[x+i+j,y+i-j] for j in range(self.win_len)])
                 if np.sum(board[points[:,0],points[:,1]]) == self.win_len * state.on_turn:
                     return True
         

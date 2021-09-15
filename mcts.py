@@ -83,8 +83,8 @@ def ucb_score(parent, child):
     return value_score + prior_score
 
 if __name__ == "__main__":
-    a = Node(0,0)
-    b = Node(1,1)
+    a = Node(0)
+    b = Node(1)
 
     a.children[1] = 2
     print(a.children)
