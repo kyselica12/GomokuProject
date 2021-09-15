@@ -72,7 +72,7 @@ class Game:
         moves = state.moves + (move,)
         terminal = reward != 0 or len(self.available_moves(state)) == 0
 
-        return GameState(moves, on_turn, terminal, reward)
+        return GameState(moves, on_turn, terminal, reward, self.size)
 
     def winner_after_move(self, state:GameState, move):
         
@@ -81,23 +81,23 @@ class Game:
 
         x, y = move
         for i in range(-(self.win_len-1), 1):
-            # win sequence in row
-            if x+i >= 0 and x+(self.win_len-1) < self.size:
+            # win sequence in column
+            if x+i >= 0 and x+i+(self.win_len-1) < self.size:
                 if np.sum(board[x+i:x+i+self.win_len,y]) == self.win_len * state.on_turn:
                     return True
-            # win sequence in column
-            if y+i >= 0 and y+(self.win_len-1) < self.size:
+            # win sequence in row
+            if y+i >= 0 and y+i+(self.win_len-1) < self.size:
                 if np.sum(board[x,y+i:y+i+self.win_len]) == self.win_len * state.on_turn:
                     return True
 
             # win sequence in diagonal from bottom to top
-            if x+i >= 0 and x+(self.win_len-1) < self.size and y+i >= 0 and y+(self.win_len-1) < self.size:
+            if x+i >= 0 and x+i+(self.win_len-1) < self.size and y+i >= 0 and y+i+(self.win_len-1) < self.size:
                 points = np.array([[x+i+j,y+i+j] for j in range(self.win_len)])
                 if np.sum(board[points[:,0],points[:,1]]) == self.win_len * state.on_turn:
                     return True
             
             # win sequence in diagonal from top to bottom
-            if x+i >= 0 and x+self.win_len-1 < self.size and y+i >= 0 and y+(self.win_len-1) < self.size:
+            if x+i >= 0 and x+i+self.win_len-1 < self.size and y+i >= 0 and y+i+(self.win_len-1) < self.size:
                 points = np.array([[x+i+j,y+i-j] for j in range(self.win_len)])
                 if np.sum(board[points[:,0],points[:,1]]) == self.win_len * state.on_turn:
                     return True
@@ -127,18 +127,5 @@ class Game:
 
         return lines(board) or columns(board) or diagonals(board)
 
-if __name__ == "__main__":
-
-    game = Game()
-    s = game.get_new_state()
-    print(s)
-    moves = list((i,j) for i in range(5) for j in range(5))
 
 
-    for m in moves:
-        print(m)
-        s = game.move(s, m)
-        print(s)
-        if s.terminal:
-            print('Terminal')
-            break

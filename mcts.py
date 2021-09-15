@@ -6,13 +6,13 @@ from model import Model
 
 
 class Node:
-    def __init__(self, prior):
+    def __init__(self, prior, state=None):
         self.prior: float = prior
         self.reward: float = 0
-        self.children: Dict = {}
+        self.children: Dict = None
         self.visit_count = 0
         self.value_sum = 0
-        self.state: GameState = None
+        self.state: GameState = state
 
     def value(self):
         return self.value_sum / self.visit_count
@@ -21,13 +21,20 @@ class Node:
         reward, probs = model.predict(state)
         self.reward = reward
         available_moves = game.available_moves(state)
+
+        self.children = {}
         for (r, c) in available_moves:
-            self.children[(r,c)] = Node(prior=probs[r,c])
+            self.children[(r,c)] = Node(prior=probs[r,c], state=game.move(self.state, (r, c)))
 
     def select_child(self):
         # c -> tuple (move, node) -> c[1] is the children node
         return max(self.children.items(), key=lambda c: ucb_score(self, c[1]))
 
+    def expanded(self):
+        return self.children is not None
+
+    def __str__(self):
+        return f"{self.visit_count}, {self.expanded()}"
 
 class MCTS:
 
@@ -37,7 +44,7 @@ class MCTS:
         self.discount: float = discount
 
     def run(self, state, num_simulations=5):
-        root = Node(0)
+        root = Node(0, state=state)
         # EXPAND root
         root.expand(self.model, self.game, state)
 
@@ -49,9 +56,7 @@ class MCTS:
                 move, node = node.select_child()
                 search_path.append(node)
 
-            parent = search_path[-2]
-            state = parent.state
-            next_state = self.game.move(state, move)
+            next_state = node.state
 
             if next_state.terminal:
                 value = next_state.reward
@@ -65,7 +70,7 @@ class MCTS:
         return root
 
     def backup(self, search_path, value):
-        value = -value
+
         for node in reversed(search_path):
             node.value_sum += value
             node.visit_count += 1
