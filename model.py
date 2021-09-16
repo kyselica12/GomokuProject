@@ -20,3 +20,5 @@ class DummyModel(Model):
         probs = np.ones((self.size, self.size)) * 1 / (self.size ** 2)
 
         return reward, probs
+
+
