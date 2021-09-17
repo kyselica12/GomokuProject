@@ -11,7 +11,7 @@ class NetWrapper:
         self.board_size = net_config.board_size
         self.model = BetaZero(net_config)
         self.model.to(device=net_config.device)
-        self.device = net_config.device
+        self.device = torch.device(net_config.device)
         self.optimizer = None
 
     def train(self, data, batch_size, n_iters, loss_visual_step=5, initiale_optimizer=True):
@@ -29,8 +29,9 @@ class NetWrapper:
             board, policy, value = data.get_batch(batch_size)  # TODO get batch from dataset
             self.optimizer.zero_grad()
 
-            v, p = self.model(torch.Tensor(board))
-            loss = self.model.loss((v, p), (torch.Tensor(value), torch.Tensor(policy.reshape(-1,self.board_size*self.board_size))))
+            v, p = self.model(torch.Tensor(board).to(self.device))
+            loss = self.model.loss((v, p), (torch.Tensor(value).to(self.device),
+                                            torch.Tensor(policy.reshape(-1,self.board_size*self.board_size)).to(self.device)))
             loss.backward()
             self.optimizer.step()
 
