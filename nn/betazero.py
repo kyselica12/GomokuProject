@@ -28,8 +28,8 @@ class BetaZero(nn.Module):
                                        in_chanels=config.num_states,
                                        stride=1,
                                        planes=config.input_cov_size)
-        self.res_layers = [ResidualLayer(in_chanels=config.input_cov_size, planes=config.output_cov_size, stride=1)
-                           for _ in range(config.num_res_layers)]
+        self.res_layers = nn.ModuleList( [ResidualLayer(in_chanels=config.input_cov_size, planes=config.output_cov_size, stride=1)
+                           for _ in range(config.num_res_layers)] )
         self.value_head = ValueHead(in_chanels=config.output_cov_size, board_size=config.board_size, hidden_dim=config.hidden_dim)
         self.policy_head = PolicyHead(in_chanels=config.output_cov_size, board_size=config.board_size)
 
