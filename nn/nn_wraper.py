@@ -36,7 +36,9 @@ class NetWrapper:
 
             v, p = self.model(torch.Tensor(board).to(self.device))
             loss = self.model.loss((v, p), (torch.Tensor(value).to(self.device),
-                                            torch.Tensor(policy.reshape(-1,self.board_size*self.board_size)).to(self.device)))
+                                            torch.Tensor(policy.reshape(-1,self.board_size*self.board_size)).to(self.device)
+                                            )
+                                   )
             loss.backward()
             self.optimizer.step()
 
@@ -68,7 +70,9 @@ class NetWrapper:
                 v, p = self.model(torch.Tensor(board).to(self.device))
                 loss = self.model.loss((v, p), (
                                                 torch.Tensor(value).to(self.device),
-                                                torch.Tensor(policy.reshape(-1, self.board_size * self.board_size))).to(self.device))
+                                                torch.Tensor(policy.reshape(-1, self.board_size * self.board_size)).to(self.device)
+                                               )
+                                       )
                 loss.backward()
                 self.optimizer.step()
 
