@@ -10,8 +10,8 @@ class NetWrapper:
     def __init__(self, net_config: BetaZeroConfig):
         self.board_size = net_config.board_size
         self.model = BetaZero(net_config)
-        self.model.to(device=net_config.device)
         self.device = torch.device(net_config.device)
+        self.model = self.model.to(device=net_config.device)
         self.optimizer = None
 
     def train(self, data, batch_size, n_iters, loss_visual_step=5, initiale_optimizer=True):
