@@ -60,9 +60,10 @@ class NetWrapper:
                 board, policy, value = data.get_batch(1)  # TODO get batch from dataset
                 self.optimizer.zero_grad()
 
-                v, p = self.model(torch.Tensor(board))
+                v, p = self.model(torch.Tensor(board).to(self.device))
                 loss = self.model.loss((v, p), (
-                torch.Tensor(value), torch.Tensor(policy.reshape(-1, self.board_size * self.board_size))))
+                                                torch.Tensor(value).to(self.device),
+                                                torch.Tensor(policy.reshape(-1, self.board_size * self.board_size))).to(self.device))
                 loss.backward()
                 self.optimizer.step()
 
