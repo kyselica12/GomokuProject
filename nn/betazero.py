@@ -1,5 +1,6 @@
 import torch
 import torch.nn as nn
+import dataclasses
 
 from nn.residual import ResidualLayer
 from nn.conv import ConvolutionalLayer
@@ -7,15 +8,29 @@ from nn.value_head import ValueHead
 from nn.policy_head import PolicyHead
 
 
+@dataclasses.dataclass
+class BetaZeroConfig:
+    board_size: int = 20
+    num_states: int = 1
+    input_cov_size: int = 128
+    output_cov_size: int = 128
+    num_res_layers: int = 5
+    hidden_dim: int = 128
+
+
 class BetaZero(nn.Module):
 
-    def __init__(self, board_size=20, num_states=1, input_conv_size=128, output_conv_size=128, num_res_layers=5):
+    def __init__(self, config: BetaZeroConfig):
         super(BetaZero, self).__init__()
-
-        self.conv = ConvolutionalLayer(board_size=board_size, in_chanels=num_states,stride=1, planes=input_conv_size)
-        self.res_layers = [ResidualLayer(in_chanels=input_conv_size, planes=output_conv_size, stride=1) for _ in range(num_res_layers)]
-        self.value_head = ValueHead(in_chanels=output_conv_size, board_size=board_size)
-        self.policy_head = PolicyHead(in_chanels=output_conv_size, board_size=board_size)
+        self.cofig = config
+        self.conv = ConvolutionalLayer(board_size=config.board_size,
+                                       in_chanels=config.num_states,
+                                       stride=1,
+                                       planes=config.input_cov_size)
+        self.res_layers = [ResidualLayer(in_chanels=config.input_cov_size, planes=config.output_cov_size, stride=1)
+                           for _ in range(config.num_res_layers)]
+        self.value_head = ValueHead(in_chanels=config.output_cov_size, board_size=config.board_size, hidden_dim=config.hidden_dim)
+        self.policy_head = PolicyHead(in_chanels=config.output_cov_size, board_size=config.board_size)
 
     def forward(self, x):
 
