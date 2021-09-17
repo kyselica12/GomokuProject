@@ -1,11 +1,13 @@
 import torch
 import tqdm
 
+from game import GameState
+from model import Model
 from nn.betazero import BetaZero, BetaZeroConfig
 import torch.optim as  optim
 
 
-class NetWrapper:
+class NetWrapper(Model):
 
     def __init__(self, net_config: BetaZeroConfig):
         self.board_size = net_config.board_size
@@ -85,10 +87,13 @@ class NetWrapper:
 
         return total_loss / (n_iters*len(data))
 
-    def predict(self, board):
+    def predict(self, state: GameState):
+        board = state.get_board()
         self.model.eval()
         with torch.no_grad():
-            v, p = self.model(torch.Tensor(board))
+            v, p = self.model(torch.Tensor(
+                board.reshape(1,1,self.board_size, self.board_size)
+            ).to(self.device))
 
         value = v.detatch().numpy()
         probs = p.detatch().numpy().reshape(self.board_size, self.board_size)
