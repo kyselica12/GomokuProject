@@ -12,12 +12,16 @@ class NetWrapper:
         self.model = BetaZero(net_config)
         self.device = torch.device(net_config.device)
         if torch.cuda.is_available():
+            print("jop")
             self.model.cuda()
+        else:
+            print(":( nop")
         self.optimizer = None
 
     def train(self, data, batch_size, n_iters, loss_visual_step=5, initiale_optimizer=True):
 
         self.model.train()
+        self.model.cuda()
 
         if initiale_optimizer:
             self.optimizer = optim.Adam(self.model.parameters())
@@ -48,6 +52,7 @@ class NetWrapper:
     def initial_train(self, data, n_iters=1, loss_visual_step=10):
 
         self.model.train()
+
         self.optimizer = optim.Adam(self.model.parameters())
 
         total_loss = 0.
