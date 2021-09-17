@@ -12,10 +12,7 @@ class NetWrapper:
         self.model = BetaZero(net_config)
         self.device = torch.device(net_config.device)
         if torch.cuda.is_available():
-            print("jop")
             self.model.cuda()
-        else:
-            print(":( nop")
         self.optimizer = None
 
     def train(self, data, batch_size, n_iters, loss_visual_step=5, initiale_optimizer=True):
@@ -80,15 +77,13 @@ class NetWrapper:
                 actual_loss += loss.item()
                 iter_loss += loss.item()
 
-                if i % loss_visual_step == 0:
-                    print(f"\t{i} loss: {(actual_loss / loss_visual_step):.3f}")
-                    actual_loss = 0
+                # if i % loss_visual_step == 0:
+                #     print(f"\t{i} loss: {(actual_loss / loss_visual_step):.3f}")
+                #     actual_loss = 0
 
-            print(f"{i} iteration loss: {iter_loss/len(data)}")
+            print(f"{i} iteration loss: {iter_loss/(len(data))}")
 
-        return total_loss / n_iters
-
-
+        return total_loss / (n_iters*len(data))
 
     def predict(self, board):
         self.model.eval()
@@ -104,13 +99,29 @@ class NetWrapper:
 
         torch.save({
             'model_state_dict': self.model.state_dict(),
-            'oprimizer_state_dict': self.optimizer.state_dict()
+            'optimizer_state_dict': self.optimizer.state_dict()
         }, f"{folder}/{name}")
 
     def load_model(self, path, load_optim=False):
-        cp = torch.load(path)
+        cp = torch.load(path, map_location=self.device)
         self.model.load_state_dict(cp['model_state_dict'])
         if load_optim:
             self.optimizer = optim.Adam(self.model.parameters())
             self.optimizer.load_state_dict(cp['optimizer_state_dict'])
         return self.model
+
+if __name__ == '__main__':
+    import torch
+
+    conf = BetaZeroConfig(board_size=15,
+                          num_states=1,
+                          num_res_layers=10,
+                          hidden_dim=128,
+                          input_cov_size=64,
+                          output_cov_size=64,
+                          device='cpu')
+    wrapper = NetWrapper(conf)
+
+    model = torch.load("C:\\Users\\user\\Documents\\GomokuProject\\resources\\models\\cuda_15x15_5epochs", map_location=torch.device('cpu'))
+
+    print(model.keys())
