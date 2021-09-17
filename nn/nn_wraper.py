@@ -11,7 +11,8 @@ class NetWrapper:
         self.board_size = net_config.board_size
         self.model = BetaZero(net_config)
         self.device = torch.device(net_config.device)
-        self.model = self.model.to(device=net_config.device)
+        if torch.cuda.is_available():
+            self.model.cuda()
         self.optimizer = None
 
     def train(self, data, batch_size, n_iters, loss_visual_step=5, initiale_optimizer=True):
