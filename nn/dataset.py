@@ -63,7 +63,7 @@ class TrainingDataLoader:
         values = values[indices]
 
         self.i += 1
-        if self.i == len(self.data):
+        if self.i == len(self.batches):
             self._shuffle_batch_indices()
             self.i = 0
 

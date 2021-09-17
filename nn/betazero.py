@@ -16,6 +16,7 @@ class BetaZeroConfig:
     output_cov_size: int = 128
     num_res_layers: int = 5
     hidden_dim: int = 128
+    device: str = 'cpu'
 
 
 class BetaZero(nn.Module):
