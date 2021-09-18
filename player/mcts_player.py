@@ -30,6 +30,7 @@ class MCTSPlayer(Player):
         return move
 
     def _move_from_distribution(self, node: Node, state):
+        #FIXME create distribution from number of visits
 
         available_moves = self.game.available_moves(state)
         moves, probs = [], []

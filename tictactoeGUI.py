@@ -2,7 +2,7 @@ import PySimpleGUI as sg
 from game import *
 import numpy as np
 
-SIZE = 16
+SIZE = 15
 
 
 

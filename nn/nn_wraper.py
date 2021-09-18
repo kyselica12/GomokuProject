@@ -88,6 +88,7 @@ class NetWrapper(Model):
         return total_loss / (n_iters*len(data))
 
     def predict(self, state: GameState):
+        #FIXME if predicting as 'O' need to invert board
         board = state.get_board()
         self.model.eval()
         with torch.no_grad():
