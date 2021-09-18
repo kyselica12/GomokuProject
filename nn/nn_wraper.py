@@ -30,7 +30,7 @@ class NetWrapper(Model):
 
         for i in range(1, n_iters + 1):
 
-            board, policy, value = data.get_batch(batch_size)  # TODO get batch from dataset
+            board, policy, value = data.get_batch(batch_size)
             self.optimizer.zero_grad()
 
             v, p = self.model(torch.Tensor(board).to(self.device))
@@ -63,7 +63,7 @@ class NetWrapper(Model):
             iter_loss = 0.
             for j in tqdm.tqdm(range(len(data))):
 
-                board, policy, value = data.get_batch(1)  # TODO get batch from dataset
+                board, policy, value = data.get_batch(1)
                 self.optimizer.zero_grad()
 
                 v, p = self.model(torch.Tensor(board).to(self.device))
@@ -88,8 +88,7 @@ class NetWrapper(Model):
         return total_loss / (n_iters*len(data))
 
     def predict(self, state: GameState):
-        #FIXME if predicting as 'O' need to invert board
-        board = state.get_board()
+        board = state.get_board() * state.on_turn
         self.model.eval()
         with torch.no_grad():
             v, p = self.model(torch.Tensor(

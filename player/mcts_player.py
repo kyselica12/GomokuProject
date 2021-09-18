@@ -30,12 +30,10 @@ class MCTSPlayer(Player):
         return move
 
     def _move_from_distribution(self, node: Node, state):
-        #FIXME create distribution from number of visits
-
         available_moves = self.game.available_moves(state)
         moves, probs = [], []
         for m in available_moves:
-            probs.append(node.children[m].prior)
+            probs.append(node.children[m].visit_count / node.visit_count)
             moves.append(m)
 
         winner_i = np.random.choice(len(available_moves), 1, probs)
