@@ -1,6 +1,8 @@
 import math
 from typing import Dict
 
+import numpy as np
+
 from game import GameState, Game
 from model import Model
 
@@ -22,9 +24,10 @@ class Node:
         self.reward = reward
         available_moves = game.available_moves(state)
 
+        total_sum = np.sum(probs[available_moves])
         self.children = {}
         for (r, c) in available_moves:
-            self.children[(r,c)] = Node(prior=probs[r,c], state=game.move(self.state, (r, c)))
+            self.children[(r,c)] = Node(prior=probs[r,c]/total_sum, state=game.move(self.state, (r, c)))
 
     def select_child(self):
         # c -> tuple (move, node) -> c[1] is the children node

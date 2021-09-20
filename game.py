@@ -63,7 +63,7 @@ class Game:
         if state.terminal:
             return set()
 
-        return self.ALL_MOVES - set(state.moves)
+        return np.tuple(self.ALL_MOVES - set(state.moves))
         
     def move(self, state:GameState, move):
 
