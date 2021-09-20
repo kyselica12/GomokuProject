@@ -83,7 +83,7 @@ class MCTS:
 def ucb_score(parent, child):
     prior_score = child.prior * math.sqrt(parent.visit_count) / (child.visit_count + 1)
     if child.visit_count > 0:
-        # The value of the child is from the perspective of the opposing player
+        # The value of the child is from the perspective of the opposing play
         value_score = -child.value()
     else:
         value_score = 0

@@ -1,5 +1,5 @@
 from game import GameState
-from player.player import Player
+from play.player import Player
 
 class HumanPlayer(Player):
 
@@ -9,7 +9,7 @@ class HumanPlayer(Player):
         return move
 
     def _get_input(self, moves):
-        print("Human player move: ")
+        print("Human play move: ")
         row = int(input('\tRow   : '))
         col = int(input('\tColumn: '))
         move = (row, col)

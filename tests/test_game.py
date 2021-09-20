@@ -125,7 +125,7 @@ class GameTests(TestCase):
         winner_test(moves[1:], moves[0], "first")
 
         # need to reverse order in second half of moves because we need to
-        # continue with move of player one
+        # continue with move of play one
         winner_test(moves[:4] + moves[5:][::-1], moves[4], "in the middle")
 
     def test_winner_after_move_diagonal_line(self):
@@ -139,7 +139,7 @@ class GameTests(TestCase):
         winner_test(moves[1:], moves[0], "first")
 
         # need to reverse order in second half of moves because we need to
-        # continue with move of player one
+        # continue with move of play one
         winner_test(moves[:4] + moves[5:][::-1], moves[4], "in the middle")
 
     def test_winner_after_move_vertical_line(self):
@@ -153,6 +153,6 @@ class GameTests(TestCase):
         winner_test(moves[1:], moves[0], "first")
 
         # need to reverse order in second half of moves because we need to
-        # continue with move of player one
+        # continue with move of play one
         winner_test(moves[:4] + moves[5:][::-1], moves[4], "in the middle")
 

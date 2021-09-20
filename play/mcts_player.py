@@ -2,7 +2,7 @@ import numpy as np
 
 from game import GameState
 from mcts import MCTS, Node
-from player.player import Player
+from play.player import Player
 from nn.nn_wraper import NetWrapper
 
 class MCTSPlayer(Player):
