@@ -24,7 +24,9 @@ class Node:
         self.reward = reward
         available_moves = game.available_moves(state)
 
-        total_sum = np.sum(probs[available_moves])
+        rows, cols = [m[0] for m in available_moves], [m[1] for m in available_moves]
+
+        total_sum = np.sum((rows, cols))
         self.children = {}
         for (r, c) in available_moves:
             self.children[(r,c)] = Node(prior=probs[r,c]/total_sum, state=game.move(self.state, (r, c)))

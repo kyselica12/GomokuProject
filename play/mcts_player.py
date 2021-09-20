@@ -7,10 +7,9 @@ from nn.nn_wraper import NetWrapper
 
 class MCTSPlayer(Player):
 
-    def __init__(self, game, model_cfg, model_path, exploration=False, discount=0, iters=50):
+    def __init__(self, game,net, exploration=False, discount=0, iters=50):
         super().__init__(game)
-        self.net_wraper = NetWrapper(model_cfg)
-        self.net_wraper.load_model(model_path)
+        self.net_wraper = net
         self.exploration = exploration
         self.mcts = MCTS(self.net_wraper, self.game, discount=discount)
         self.iters = iters
