@@ -1,5 +1,6 @@
 import glob
 import json
+from typing import List
 
 import numpy as np
 
@@ -81,7 +82,7 @@ class GameDatabase:
         self.data = []
         self.board_size = board_size
 
-    def add_games(self, states: list[GameState]):
+    def add_games(self, states: List[GameState]):
         for state in states:
             if state.terminal and state.reward != 0:
                 value = -state.on_turn
