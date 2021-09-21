@@ -17,7 +17,7 @@ class NetWrapper(Model):
             self.model.cuda()
         self.optimizer = None
 
-    def train(self, data, batch_size, n_iters, loss_visual_step=5, initiale_optimizer=True):
+    def self_play_train(self, data, batch_size, n_iters, loss_visual_step=5, initiale_optimizer=True):
 
         self.model.train()
         self.model.cuda()

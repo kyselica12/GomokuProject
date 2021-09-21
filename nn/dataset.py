@@ -1,6 +1,5 @@
 import glob
 import json
-from queue import Queue
 
 import numpy as np
 
@@ -75,23 +74,40 @@ class TrainingDataLoader:
 
 class GameDatabase:
 
-    def __init__(self, size, board_size, batch_size):
+    def __init__(self, size, board_size):
         self.size = size
-        self.board_size = board_size
         self.game = Game(size=self.board_size, win_size=5)
         self.batch_size = self.batch_size
-        self.queue = Queue(maxsize=self.size)
+        self.data = []
+        self.board_size = board_size
 
     def add_games(self, states: list[GameState]):
         for state in states:
             if state.terminal and state.reward != 0:
                 value = -state.on_turn
-                self.queue.put((state.moves, value))
+                self.data.append((state.moves, value))
+                if len(self.data) > self.size:
+                    self.data.pop(0)
 
     def get_batch(self, batch_size):
-        #TODO create batch -> batch_size is number of games or number of positions??
-        #TODO use list as queue due to random choice
-        return []
+        games = self.data[np.random.choice(len(self.data), size=batch_size, replace=False)]
+        boards, probs, values = decompose_games(games, self.board_size, self.game, only_winning=True)
+
+        indices = np.arange(len(boards))
+        np.random.shuffle(indices)
+        boards = boards[indices]
+        probs = probs[indices]
+        values = values[indices]
+
+        boards = boards.reshape(-1, 1, self.board_size, self.board_size)
+
+        return boards, probs, values
+
+    def full(self):
+        return self.size == len(self.data)
+
+    def __len__(self):
+        return len(self.data)
 
 
 
