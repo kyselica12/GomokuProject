@@ -35,7 +35,7 @@ class MCTSPlayer(Player):
             probs.append(node.children[m].visit_count / node.visit_count)
             moves.append(m)
 
-        winner_i = np.random.choice(len(available_moves), 1, probs)
+        winner_i = np.random.choice(len(available_moves), 1, probs)[0]
         move = moves[winner_i]
 
         return move
