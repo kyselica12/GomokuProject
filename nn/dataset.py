@@ -79,7 +79,6 @@ class GameDatabase:
         self.size = size
         self.board_size = board_size
         self.game = Game(size=self.board_size, win_size=5)
-        self.batch_size = self.batch_size
         self.data = []
 
     def add_games(self, states: List[GameState]):
@@ -134,3 +133,5 @@ def decompose_games(data, board_size, game, only_winning=True):
 
 if __name__ == "__main__":
     file = "C:\\Users\\user\\Documents\\GomokuProject\\resources\\games_20x20\\games_2019_X.json"
+
+    db = GameDatabase(5, 10)
