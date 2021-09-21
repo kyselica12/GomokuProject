@@ -20,7 +20,7 @@ class SelfPlayTraining:
         self.size = model_conf.board_size
         self.mcts_iters = mcts_iters
         self.storage_size = storage_size
-        self.database = GameDatabase(storage_size, board_size=self.size)
+        self.database = GameDatabase(storage_size, self.size)
 
         self.best_model = NetWrapper(model_conf)
         self.best_model.load_model(model_path)
