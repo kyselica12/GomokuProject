@@ -77,10 +77,10 @@ class GameDatabase:
 
     def __init__(self, size, board_size):
         self.size = size
+        self.board_size = board_size
         self.game = Game(size=self.board_size, win_size=5)
         self.batch_size = self.batch_size
         self.data = []
-        self.board_size = board_size
 
     def add_games(self, states: List[GameState]):
         for state in states:
