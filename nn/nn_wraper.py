@@ -95,8 +95,8 @@ class NetWrapper(Model):
                 board.reshape(1,1,self.board_size, self.board_size)
             ).to(self.device))
 
-        value = v.numpy()#.detatch().numpy()
-        probs = p.numpy().reshape(self.board_size, self.board_size) # .detatch()
+        value = v.cpu().numpy()#.detatch().numpy()
+        probs = p.cpu().numpy().reshape(self.board_size, self.board_size) # .detatch()
 
         return value, probs
 
