@@ -77,9 +77,9 @@ if __name__ == "__main__":
     wrapper.load_model(path)
 
     game = Game(size=15, win_size=5)
-    player1 = MCTSPlayer(game, wrapper, exploration=True, iters=100)#HumanPlayer(game)
+    player1 = MCTSPlayer(game, wrapper, exploration=False, iters=100)#HumanPlayer(game)
     player2 = MCTSPlayer(game, wrapper, exploration=False, iters=100)
 
-    state = play_game(player1, player2, game, show=True)
+    state = play_game(player1, player2, game, show=True, random_start=True)
 
 
